@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NR Consultoria TI — Tecnologia que Transforma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #050810;
+      --bg2:      #080d1a;
+      --bg3:      #0c1225;
+      --cyan:     #00C8FF;
+      --cyan-dim: #007FA8;
+      --blue:     #1A6FFF;
+      --blue-lt:  #4D95FF;
+      --white:    #E8F0FF;
+      --muted:    #5A6A8A;
+      --border:   rgba(0,200,255,.12);
+      --border2:  rgba(0,200,255,.06);
+      --glow:     0 0 40px rgba(0,200,255,.18);
+    }
+
+    /* ── LIGHT MODE ── */
+    html.light {
+      --bg:       #F0F4FF;
+      --bg2:      #E4EAF8;
+      --bg3:      #D8E2F5;
+      --cyan:     #0077AA;
+      --cyan-dim: #005580;
+      --blue:     #1A6FFF;
+      --blue-lt:  #1558CC;
+      --white:    #0A1428;
+      --muted:    #4A5880;
+      --border:   rgba(0,119,170,.18);
+      --border2:  rgba(0,119,170,.09);
+      --glow:     0 0 40px rgba(0,119,170,.14);
+    }
+
+    html.light body::before {
+      background-image:
+        linear-gradient(rgba(0,119,170,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,119,170,.04) 1px, transparent 1px);
+    }
+    html.light body::after { opacity: 0; }
+
+    html.light nav.scrolled {
+      background: rgba(240,244,255,.92);
+    }
+    html.light .hero-glow-1 { background: rgba(0,119,170,.1); }
+    html.light .hero-glow-2 { background: rgba(26,111,255,.1); }
+
+    html.light .terminal-box { background: #fff; border-color: rgba(0,119,170,.2); }
+    html.light .terminal-bar { background: var(--bg3); }
+    html.light .t-comment { color: #90A0B8; }
+    html.light .t-str { color: #AA6600; }
+    html.light .t-val { color: #007744; }
+    html.light .t-cmd { color: var(--white); }
+
+    html.light .sobre-badge,
+    html.light .servico-card,
+    html.light .product-card,
+    html.light .dif-item,
+    html.light .ticker,
+    html.light .step-circle,
+    html.light footer,
+    html.light #processo,
+    html.light #loja { background-color: var(--bg2); }
+
+    html.light .servico-card:hover,
+    html.light .dif-item:hover { background: var(--bg3); }
+    html.light .servico-card::before { background: linear-gradient(to right, var(--cyan), transparent); }
+
+    html.light .ticker-item { color: var(--cyan-dim); }
+    html.light .open-badge { background: rgba(0,130,80,.1); border-color: rgba(0,130,80,.25); color: #007744; }
+    html.light .open-dot { background: #007744; }
+    html.light .status-dot { background: #007744; }
+
+    html.light #cta {
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,119,170,.07) 0%, transparent 70%), var(--bg2);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    /* ── SCANLINE ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.06) 2px, rgba(0,0,0,.06) 4px);
+      pointer-events: none;
+      opacity: .4;
+    }
+
+    /* ──────────── NAV ──────────── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5vw;
+      transition: background .4s, border-color .4s;
+    }
+    nav.scrolled {
+      background: rgba(5,8,16,.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: .7rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 34px; height: 34px;
+      border: 1.5px solid var(--cyan);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: .9rem;
+      color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0,200,255,.3);
+    }
+    .nav-logo-text {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: .95rem; letter-spacing: .06em;
+      color: var(--white);
+    }
+    .nav-logo-text span { color: var(--cyan); }
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none;
+      transition: color .2s; font-family: 'IBM Plex Mono', monospace;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+      background: transparent; color: var(--cyan);
+      padding: .55rem 1.4rem;
+      border: 1px solid var(--cyan);
+      cursor: pointer; transition: all .25s;
+      text-decoration: none; display: inline-block;
+      box-shadow: 0 0 12px rgba(0,200,255,.12);
+    }
+    .nav-cta:hover {
+      background: var(--cyan); color: var(--bg);
+      box-shadow: 0 0 24px rgba(0,200,255,.4);
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 22px; height: 1.5px; background: var(--cyan); display: block; transition: .3s; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      position: relative; width: 52px; height: 26px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .theme-toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      transition: background .35s, border-color .35s, box-shadow .35s;
+    }
+    .theme-toggle input:checked + .toggle-track {
+      background: rgba(0,200,255,.12);
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0,200,255,.25);
+    }
+    .toggle-thumb {
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--muted);
+      transition: transform .35s cubic-bezier(.34,1.56,.64,1), background .35s;
+    }
+    .theme-toggle input:checked + .toggle-track .toggle-thumb {
+      transform: translateX(26px);
+      background: var(--cyan);
+    }
+    .toggle-icon-dark,
+    .toggle-icon-light {
+      position: absolute; top: 50%; font-size: .65rem;
+      transform: translateY(-50%); pointer-events: none;
+      transition: opacity .25s; line-height: 1;
+    }
+    .toggle-icon-dark  { left: 6px; }
+    .toggle-icon-light { right: 5px; }
+    .theme-toggle input:checked ~ .toggle-icon-dark  { opacity: 0; }
+    .theme-toggle input:not(:checked) ~ .toggle-icon-light { opacity: 0; }
+
+    /* Nav right cluster */
+    .nav-right { display: flex; align-items: center; gap: .9rem; }
+
+    /* ──────────── HERO ──────────── */
+    #hero {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: center;
+      padding: 0 5vw 0 clamp(5vw, 10vw, 12vw);
+      overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; pointer-events: none;
+      border-radius: 50%; filter: blur(100px);
+    }
+    .hero-glow-1 {
+      width: 500px; height: 500px;
+      background: rgba(0,200,255,.12);
+      top: -80px; right: -80px;
+      animation: breathe 8s ease-in-out infinite;
+    }
+    .hero-glow-2 {
+      width: 350px; height: 350px;
+      background: rgba(26,111,255,.14);
+      bottom: 0; left: 30%;
+      animation: breathe 11s 3s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.2);opacity:.7} }
+
+    .hero-code-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .72rem; color: var(--cyan-dim);
+      margin-bottom: 1.4rem;
+      animation: fadeUp .7s .1s both;
+    }
+    .hero-code-tag span { color: var(--cyan); }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: .8rem;
+      animation: fadeUp .7s .2s both;
+    }
+    .eyebrow-line { width: 32px; height: 1px; background: var(--cyan); }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(3rem, 7.5vw, 7.5rem);
+      line-height: .95; color: var(--white); max-width: 14ch;
+      animation: fadeUp .8s .3s both;
+    }
+    .hero-title .accent { color: var(--cyan); display: block; }
+    .hero-title .accent-blue { color: var(--blue-lt); }
+
+    .hero-sub {
+      font-size: clamp(.88rem, 1.5vw, 1rem);
+      color: var(--muted); line-height: 1.8;
+      max-width: 480px; margin-top: 1.8rem;
+      animation: fadeUp .8s .45s both;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap;
+      animation: fadeUp .8s .58s both;
+    }
+    .btn-primary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      background: var(--cyan); color: var(--bg);
+      padding: .9rem 2rem; border: none; cursor: pointer; font-weight: 500;
+      transition: all .25s; text-decoration: none; display: inline-block;
+      box-shadow: 0 0 28px rgba(0,200,255,.3);
+    }
+    .btn-primary:hover { box-shadow: 0 0 44px rgba(0,200,255,.55); transform: translateY(-2px); }
+    .btn-ghost {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      background: transparent; color: var(--white);
+      padding: .9rem 2rem; border: 1px solid rgba(232,240,255,.18);
+      cursor: pointer; transition: all .25s; text-decoration: none; display: inline-block;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    .hero-metrics {
+      display: flex; gap: 3rem; margin-top: 4rem;
+      animation: fadeUp .8s .72s both;
+      flex-wrap: wrap;
+    }
+    .metric { display: flex; flex-direction: column; gap: .2rem; }
+    .metric-num {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 2rem; color: var(--white); line-height: 1;
+    }
+    .metric-num span { color: var(--cyan); }
+    .metric-label { font-size: .72rem; color: var(--muted); letter-spacing: .08em; font-family: 'IBM Plex Mono', monospace; }
+
+    .hero-status {
+      position: absolute; bottom: 2.5rem; right: 5vw;
+      font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--muted);
+      display: flex; align-items: center; gap: .5rem;
+      animation: fadeUp .8s 1s both;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00FF88; animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ──────────── TICKER ──────────── */
+    .ticker {
+      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: .7rem 0; overflow: hidden; position: relative; z-index: 1;
+    }
+    .ticker-inner { display: flex; gap: 0; width: max-content; animation: ticker 30s linear infinite; }
+    .ticker-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .68rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--cyan-dim); padding: 0 2.5rem; white-space: nowrap;
+      display: flex; align-items: center; gap: 2.5rem;
+    }
+    .ticker-item::after { content: '//'; color: rgba(0,200,255,.3); }
+    @keyframes ticker { to { transform: translateX(-50%); } }
+
+    /* ──────────── SECTIONS ──────────── */
+    section { position: relative; z-index: 1; }
+    .section-kicker {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: .65rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: .7rem;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .section-kicker::before { content: '//'; color: var(--cyan-dim); }
+    .section-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(1.9rem, 4vw, 3.4rem);
+      color: var(--white); line-height: 1.1;
+    }
+    .section-title em { color: var(--cyan); font-style: normal; }
+    .section-desc { font-size: .92rem; color: var(--muted); line-height: 1.8; max-width: 500px; margin-top: 1rem; }
+    .hr-line { width: 40px; height: 2px; background: var(--cyan); margin: 1.2rem 0; box-shadow: 0 0 8px rgba(0,200,255,.4); }
+
+    /* ──────────── SOBRE ──────────── */
+    #sobre {
+      padding: 9rem 5vw;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center;
+    }
+    .sobre-visual { position: relative; }
+    .terminal-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+      overflow: hidden;
+    }
+    .terminal-bar {
+      background: var(--bg3); padding: .7rem 1.2rem;
+      display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-dot-r { background: #FF5F57; }
+    .t-dot-y { background: #FEBC2E; }
+    .t-dot-g { background: #28C840; }
+    .terminal-title { font-size: .65rem; color: var(--muted); margin-left: .5rem; letter-spacing: .08em; }
+    .terminal-body { padding: 1.5rem 1.4rem; font-size: .78rem; line-height: 2; color: var(--muted); }
+    .t-prompt { color: var(--cyan); }
+    .t-cmd { color: var(--white); }
+    .t-comment { color: #3a6070; }
+    .t-val { color: #00FF88; }
+    .t-str { color: #FFC857; }
+    .t-cursor { display: inline-block; width: 8px; height: 1.1em; background: var(--cyan); vertical-align: middle; animation: cur .8s step-end infinite; }
+    @keyframes cur { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .sobre-badges {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); margin-top: 1.5rem;
+    }
+    .sobre-badge {
+      background: var(--bg2); padding: 1.4rem;
+      display: flex; flex-direction: column; gap: .3rem;
+    }
+    .badge-val {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 1.8rem; color: var(--cyan); line-height: 1;
+    }
+    .badge-lbl { font-size: .7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; }
+
+    /* ──────────── SERVIÇOS ──────────── */
+    #servicos { padding: 5rem 5vw 9rem; }
+    .servicos-head { text-align: center; margin-bottom: 4rem; }
+    .servicos-head .section-desc { margin: 1rem auto 0; }
+    .servicos-head .hr-line { margin: 1.2rem auto; }
+    .servicos-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
+      background: var(--border2);
+    }
+    .servico-card {
+      background: var(--bg2); padding: 2.5rem 2rem;
+      display: flex; flex-direction: column; gap: .9rem;
+      transition: background .3s;
+      position: relative; overflow: hidden;
+      cursor: default;
+    }
+    .servico-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+      background: linear-gradient(to right, var(--cyan), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s;
+    }
+    .servico-card:hover { background: #0a1020; }
+    .servico-card:hover::before { transform: scaleX(1); }
+    .svc-num {
+      font-family: 'IBM Plex Mono', monospace; font-size: .65rem;
+      color: var(--cyan-dim); letter-spacing: .2em;
+    }
+    .svc-icon {
+      width: 46px; height: 46px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .servico-card:hover .svc-icon { border-color: var(--cyan); box-shadow: 0 0 14px rgba(0,200,255,.2); }
+    .svc-name {
+      font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: 1.05rem; color: var(--white);
+    }
+    .svc-desc { font-size: .82rem; color: var(--muted); line-height: 1.75; }
+    .svc-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+    .svc-tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: .6rem;
+      letter-spacing: .08em; color: var(--cyan-dim);
+      border: 1px solid rgba(0,200,255,.15); padding: .2rem .6rem;
+    }
+
+    /* ──────────── NOTEBOOKS / LOJA ──────────── */
+    #loja {
+      padding: 9rem 5vw;
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+      border-bottom: 1px solid var(--border2);
+    }
+    .loja-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; }
+    .product-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      padding: 2rem; position: relative;
+      transition: box-shadow .3s, border-color .3s;
+    }
+    .product-card:hover { border-color: rgba(0,200,255,.3); box-shadow: var(--glow); }
+    .product-card-tag {
+      font-family: 'IBM Plex Mono', monospace; font-size: .6rem;
+      letter-spacing: .15em; text-transform: uppercase;
+      background: rgba(0,200,255,.1); color: var(--cyan);
+      padding: .25rem .7rem; border: 1px solid rgba(0,200,255,.2);
+      display: inline-block; margin-bottom: 1rem;
+    }
+    .product-name {
+      font-family: 'Syne', sans-serif; font-weight: 600;
+      font-size: 1.1rem; color: var(--white);
+    }
+    .product-spec { font-size: .8rem; color: var(--muted); margin-top: .5rem; line-height: 1.7; }
+    .product-action {
+      margin-top: 1.3rem; display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem;
+    }
+    .product-link {
+      font-family: 'IBM Plex Mono', monospace; font-size: .72rem;
+      color: var(--cyan); text-decoration: none; letter-spacing: .08em;
+      display: flex; align-items: center; gap: .4rem; transition: gap .2s;
+    }
+    .product-link:hover { gap: .7rem; }
+    .product-label { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: var(--muted); }
+
+    .product-grid { display: flex; flex-direction: column; gap: 1px; }
+
+    /* ──────────── DIFERENCIAIS ──────────── */
+    #diferenciais { padding: 9rem 5vw; }
+    .dif-layout { display: grid; grid-template-columns: 38% 1fr; gap: 5vw; }
+    .dif-sticky { position: sticky; top: 7rem; align-self: start; }
+    .dif-list { display: flex; flex-direction: column; gap: 1px; background: var(--border2); }
+    .dif-item {
+      background: var(--bg2); padding: 2rem;
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      transition: background .3s;
+    }
+    .dif-item:hover { background: #0a1020; }
+    .dif-num {
+      font-family: 'IBM Plex Mono', monospace; font-size: .65rem;
+      color: var(--cyan); letter-spacing: .15em; flex-shrink: 0; padding-top: .2rem;
+    }
+    .dif-content {}
+    .dif-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 1rem; color: var(--white); margin-bottom: .5rem; }
+    .dif-text { font-size: .82rem; color: var(--muted); line-height: 1.75; }
+
+    /* ──────────── PROCESSO ──────────── */
+    #processo {
+      padding: 5rem 5vw 9rem;
+      background: var(--bg2);
+      border-top: 1px solid var(--border2);
+    }
+    .processo-head { text-align: center; margin-bottom: 4rem; }
+    .processo-head .hr-line { margin: 1.2rem auto; }
+    .steps-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; position: relative; }
+    .steps-grid::after {
+      content: '';
+      position: absolute; top: 42px; left: 12%; right: 12%;
+      height: 1px; background: linear-gradient(to right, var(--cyan), rgba(0,200,255,.1), var(--cyan));
+      z-index: 0;
+    }
+    .step-item {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 0 1.5rem; position: relative; z-index: 1;
+    }
+    .step-circle {
+      width: 48px; height: 48px; border: 1px solid var(--cyan);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-family: 'IBM Plex Mono', monospace; font-size: .8rem; color: var(--cyan);
+      background: var(--bg2); margin-bottom: 1.5rem;
+      box-shadow: 0 0 16px rgba(0,200,255,.2);
+    }
+    .step-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: .95rem; color: var(--white); margin-bottom: .5rem; }
+    .step-text { font-size: .78rem; color: var(--muted); line-height: 1.7; }
+
+    /* ──────────── HORÁRIO ──────────── */
+    #horario { padding: 9rem 5vw; display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; }
+    .hours-table { display: flex; flex-direction: column; gap: 0; }
+    .hour-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border2);
+      font-size: .84rem; transition: background .2s;
+    }
+    .hour-row:hover { background: rgba(0,200,255,.03); }
+    .hour-day { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: .78rem; }
+    .hour-time { color: var(--white); }
+    .hour-today .hour-day { color: var(--cyan); }
+    .hour-today .hour-time { color: var(--cyan); }
+    .hour-today { background: rgba(0,200,255,.04); }
+    .open-badge {
+      display: inline-flex; align-items: center; gap: .45rem;
+      background: rgba(0,255,136,.08); border: 1px solid rgba(0,255,136,.2);
+      color: #00FF88; font-family: 'IBM Plex Mono', monospace;
+      font-size: .68rem; letter-spacing: .12em; padding: .35rem .9rem;
+      margin-bottom: 1.5rem; text-transform: uppercase;
+    }
+    .open-dot { width: 6px; height: 6px; border-radius: 50%; background: #00FF88; animation: blink 1.5s ease-in-out infinite; }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: .9rem;
+      padding: 1.2rem 0; border-bottom: 1px solid var(--border2);
+    }
+    .contact-icon { color: var(--cyan); font-size: 1rem; flex-shrink: 0; padding-top: .1rem; }
+    .contact-text { font-size: .84rem; color: var(--muted); line-height: 1.65; }
+    .contact-text strong { color: var(--white); font-weight: 400; display: block; margin-bottom: .15rem; }
+    .contact-text a { color: var(--cyan); text-decoration: none; }
+    .contact-text a:hover { text-decoration: underline; }
+
+    /* ──────────── CTA FINAL ──────────── */
+    #cta {
+      padding: 9rem 5vw;
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(0,200,255,.06) 0%, transparent 70%),
+                  var(--bg2);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-mono {
+      font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+      color: var(--cyan-dim); margin-bottom: 1.2rem; letter-spacing: .15em;
+    }
+    .cta-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 5rem);
+      color: var(--white); line-height: 1.05;
+    }
+    .cta-title em { color: var(--cyan); font-style: normal; }
+    .cta-sub { font-size: .92rem; color: var(--muted); max-width: 480px; margin: 1.2rem auto 0; line-height: 1.8; }
+    .cta-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+
+    /* ──────────── FOOTER ──────────── */
+    footer {
+      background: #020508; border-top: 1px solid var(--border);
+      padding: 4rem 5vw 2rem;
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem;
+      padding-bottom: 3rem; border-bottom: 1px solid var(--border2);
+    }
+    .footer-logo-wrap { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-tagline { font-size: .82rem; color: var(--muted); line-height: 1.75; max-width: 260px; }
+    .social-link {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+      color: var(--cyan-dim); text-decoration: none; letter-spacing: .08em;
+      border: 1px solid rgba(0,200,255,.2); padding: .5rem 1rem;
+      transition: all .2s; margin-top: .5rem;
+    }
+    .social-link:hover { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,200,255,.2); }
+    .footer-col-title {
+      font-family: 'IBM Plex Mono', monospace; font-size: .65rem;
+      letter-spacing: .2em; text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .footer-col a { font-size: .82rem; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-bottom {
+      padding-top: 2rem; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--muted); }
+    .footer-right { font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--muted); }
+    .footer-right span { color: var(--cyan); }
+
+    /* ──────────── SCROLL REVEAL ──────────── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s, transform .65s; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: .1s; }
+    .reveal-d2 { transition-delay: .2s; }
+    .reveal-d3 { transition-delay: .3s; }
+    .reveal-d4 { transition-delay: .4s; }
+
+    /* ──────────── MOBILE ──────────── */
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .nav-right { gap: .6rem; }
+      #sobre { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 5vw; }
+      .servicos-grid { grid-template-columns: 1fr 1fr; }
+      .loja-layout { grid-template-columns: 1fr; }
+      .dif-layout { grid-template-columns: 1fr; }
+      .dif-sticky { position: static; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .steps-grid::after { display: none; }
+      #horario { grid-template-columns: 1fr; padding: 6rem 5vw; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .servicos-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .sobre-badges { grid-template-columns: 1fr 1fr; }
+      .hero-metrics { gap: 1.8rem; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .hero-title { font-size: clamp(2.6rem, 10vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon">NR</div>
+      <span class="nav-logo-text">Consultoria <span>TI</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#loja">Notebooks</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#horario">Contato</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="nav-cta" href="#cta">Solicitar Orçamento</a>
+      <label class="theme-toggle" title="Alternar modo claro/escuro" aria-label="Alternar tema">
+        <input type="checkbox" id="themeToggle"/>
+        <div class="toggle-track">
+          <div class="toggle-thumb"></div>
+        </div>
+        <span class="toggle-icon-dark">🌙</span>
+        <span class="toggle-icon-light">☀️</span>
+      </label>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div id="mobileMenu" style="display:none;position:fixed;inset:0;z-index:199;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:2rem;transition:background .35s;">
+    <a href="#sobre"        style="font-family:'Syne',sans-serif;font-size:1.6rem;color:var(--white);text-decoration:none;" onclick="closeMob()">Sobre</a>
+    <a href="#servicos"     style="font-family:'Syne',sans-serif;font-size:1.6rem;color:var(--white);text-decoration:none;" onclick="closeMob()">Serviços</a>
+    <a href="#loja"         style="font-family:'Syne',sans-serif;font-size:1.6rem;color:var(--white);text-decoration:none;" onclick="closeMob()">Notebooks</a>
+    <a href="#diferenciais" style="font-family:'Syne',sans-serif;font-size:1.6rem;color:var(--white);text-decoration:none;" onclick="closeMob()">Diferenciais</a>
+    <a href="#horario"      style="font-family:'Syne',sans-serif;font-size:1.6rem;color:var(--white);text-decoration:none;" onclick="closeMob()">Contato</a>
+    <a href="#cta" class="btn-primary" style="margin-top:1rem;" onclick="closeMob()">Solicitar Orçamento</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+
+    <p class="hero-code-tag">
+      <span>$ </span>nrconsultoriati --mode=ativo --status=online
+    </p>
+    <div class="hero-eyebrow">
+      <span class="eyebrow-line"></span>
+      Tecnologia que Transforma
+    </div>
+    <h1 class="hero-title">
+      Sua TI<br>
+      <span class="accent">sob controle.</span>
+      <span class="accent-blue" style="font-size:clamp(1.4rem,3.5vw,3rem);display:block;margin-top:.4rem;line-height:1.2;">Consultoria · Suporte · Equipamentos</span>
+    </h1>
+    <p class="hero-sub">Soluções completas em tecnologia da informação: consultoria especializada, suporte técnico ágil e venda de notebooks e equipamentos de alta performance.</p>
+    <div class="hero-actions">
+      <a href="#servicos" class="btn-primary">Ver Serviços</a>
+      <a href="#loja" class="btn-ghost">Loja de Notebooks</a>
+    </div>
+    <div class="hero-metrics">
+      <div class="metric">
+        <span class="metric-num">100<span>%</span></span>
+        <span class="metric-label">Satisfação garantida</span>
+      </div>
+      <div class="metric">
+        <span class="metric-num">24<span>h</span></span>
+        <span class="metric-label">Suporte rápido</span>
+      </div>
+      <div class="metric">
+        <span class="metric-num">+8<span>h</span></span>
+        <span class="metric-label">Atendimento diário</span>
+      </div>
+    </div>
+    <div class="hero-status">
+      <span class="status-dot"></span>
+      Sistema Online · Aberto agora
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-inner">
+      <span class="ticker-item">Suporte Técnico</span>
+      <span class="ticker-item">Venda de Notebooks</span>
+      <span class="ticker-item">Manutenção de Computadores</span>
+      <span class="ticker-item">Consultoria em TI</span>
+      <span class="ticker-item">Redes e Infraestrutura</span>
+      <span class="ticker-item">Segurança da Informação</span>
+      <span class="ticker-item">Formatação e Instalação</span>
+      <span class="ticker-item">Backup e Recuperação</span>
+      <span class="ticker-item">Suporte Técnico</span>
+      <span class="ticker-item">Venda de Notebooks</span>
+      <span class="ticker-item">Manutenção de Computadores</span>
+      <span class="ticker-item">Consultoria em TI</span>
+      <span class="ticker-item">Redes e Infraestrutura</span>
+      <span class="ticker-item">Segurança da Informação</span>
+      <span class="ticker-item">Formatação e Instalação</span>
+      <span class="ticker-item">Backup e Recuperação</span>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="sobre-visual reveal">
+      <div class="terminal-box">
+        <div class="terminal-bar">
+          <span class="t-dot t-dot-r"></span>
+          <span class="t-dot t-dot-y"></span>
+          <span class="t-dot t-dot-g"></span>
+          <span class="terminal-title">nr_consultoriati — diagnóstico.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">➜ </span><span class="t-cmd">./diagnóstico --empresa</span></div>
+          <div class="t-comment"># Analisando infraestrutura...</div>
+          <br>
+          <div><span class="t-prompt">  </span>nome: <span class="t-str">"NR Consultoria TI"</span></div>
+          <div><span class="t-prompt">  </span>status: <span class="t-val">ATIVO</span></div>
+          <div><span class="t-prompt">  </span>serviços: <span class="t-val">consultoria, suporte, vendas</span></div>
+          <div><span class="t-prompt">  </span>instagram: <span class="t-str">@nr_consultoriati</span></div>
+          <div><span class="t-prompt">  </span>loja: <span class="t-str">nrnotebooks.sigeloja.com.br</span></div>
+          <div><span class="t-prompt">  </span>horário: <span class="t-val">seg–sex, até 17:00</span></div>
+          <br>
+          <div class="t-comment"># Pronto para atender ✓</div>
+          <div><span class="t-prompt">➜ </span><span class="t-cursor"></span></div>
+        </div>
+      </div>
+      <div class="sobre-badges">
+        <div class="sobre-badge"><span class="badge-val">TI</span><span class="badge-lbl">Especializada</span></div>
+        <div class="sobre-badge"><span class="badge-val">24h</span><span class="badge-lbl">Suporte</span></div>
+        <div class="sobre-badge"><span class="badge-val">100%</span><span class="badge-lbl">Comprometimento</span></div>
+        <div class="sobre-badge"><span class="badge-val">NR</span><span class="badge-lbl">Consultoria</span></div>
+      </div>
+    </div>
+    <div class="reveal reveal-d2">
+      <p class="section-kicker">Quem somos</p>
+      <h2 class="section-title">Tecnologia que <em>funciona</em> de verdade</h2>
+      <div class="hr-line"></div>
+      <p class="section-desc">A NR Consultoria TI é uma empresa especializada em soluções tecnológicas para pessoas físicas e jurídicas. Atuamos com consultoria estratégica, suporte técnico ágil e comercialização de notebooks e equipamentos de alta performance.</p>
+      <p class="section-desc" style="margin-top:.9rem;">Nossa missão é simples: entregar tecnologia que funciona, com atendimento humano e suporte confiável. Seja para montar o home office ideal ou estruturar toda a TI da sua empresa, estamos prontos para ajudar.</p>
+      <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="https://www.instagram.com/nr_consultoriati/" target="_blank" class="btn-primary" style="font-size:.72rem;padding:.75rem 1.6rem;">📷 Instagram</a>
+        <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="btn-ghost" style="font-size:.72rem;padding:.75rem 1.6rem;">🛒 Loja Online</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="servicos-head reveal">
+      <p class="section-kicker">O que oferecemos</p>
+      <h2 class="section-title">Nossos <em>Serviços</em></h2>
+      <div class="hr-line"></div>
+      <p class="section-desc">Soluções completas do hardware ao software, do diagnóstico à implantação.</p>
+    </div>
+    <div class="servicos-grid">
+      <div class="servico-card reveal reveal-d1">
+        <span class="svc-num">01</span>
+        <div class="svc-icon">🔧</div>
+        <p class="svc-name">Manutenção Técnica</p>
+        <p class="svc-desc">Reparo e manutenção preventiva/corretiva de computadores, notebooks e impressoras. Diagnóstico rápido e solução definitiva.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Hardware</span>
+          <span class="svc-tag">Notebooks</span>
+          <span class="svc-tag">Diagnóstico</span>
+        </div>
+      </div>
+      <div class="servico-card reveal reveal-d2">
+        <span class="svc-num">02</span>
+        <div class="svc-icon">🛡️</div>
+        <p class="svc-name">Segurança & Antivírus</p>
+        <p class="svc-desc">Remoção de vírus, malware e ransomware. Instalação de soluções de segurança robustas para proteger seus dados e sistemas.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Cibersegurança</span>
+          <span class="svc-tag">LGPD</span>
+          <span class="svc-tag">Antivírus</span>
+        </div>
+      </div>
+      <div class="servico-card reveal reveal-d3">
+        <span class="svc-num">03</span>
+        <div class="svc-icon">🌐</div>
+        <p class="svc-name">Redes & Infraestrutura</p>
+        <p class="svc-desc">Projeto, instalação e configuração de redes corporativas e residenciais. Wi-Fi, cabeamento estruturado e servidores.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Wi-Fi</span>
+          <span class="svc-tag">Cabeamento</span>
+          <span class="svc-tag">Servidor</span>
+        </div>
+      </div>
+      <div class="servico-card reveal reveal-d1">
+        <span class="svc-num">04</span>
+        <div class="svc-icon">💾</div>
+        <p class="svc-name">Formatação & Instalação</p>
+        <p class="svc-desc">Formatação segura com backup completo, reinstalação de Windows/Linux e configuração de drivers e programas essenciais.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Windows</span>
+          <span class="svc-tag">Linux</span>
+          <span class="svc-tag">Backup</span>
+        </div>
+      </div>
+      <div class="servico-card reveal reveal-d2">
+        <span class="svc-num">05</span>
+        <div class="svc-icon">☁️</div>
+        <p class="svc-name">Backup & Cloud</p>
+        <p class="svc-desc">Soluções de backup automático e recuperação de dados. Implementação de armazenamento em nuvem seguro e confiável.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Nuvem</span>
+          <span class="svc-tag">Recuperação</span>
+          <span class="svc-tag">Dados</span>
+        </div>
+      </div>
+      <div class="servico-card reveal reveal-d3">
+        <span class="svc-num">06</span>
+        <div class="svc-icon">🏢</div>
+        <p class="svc-name">Consultoria Empresarial</p>
+        <p class="svc-desc">Gestão estratégica de TI para empresas. Planejamento, redução de custos e aumento de produtividade com tecnologia certa.</p>
+        <div class="svc-tags">
+          <span class="svc-tag">Estratégia</span>
+          <span class="svc-tag">Produtividade</span>
+          <span class="svc-tag">Custo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOJA / NOTEBOOKS -->
+  <section id="loja">
+    <div class="loja-layout">
+      <div class="reveal">
+        <p class="section-kicker">Loja Online</p>
+        <h2 class="section-title">Notebooks &<br><em>Equipamentos</em></h2>
+        <div class="hr-line"></div>
+        <p class="section-desc">Seleção curada de notebooks e equipamentos de informática para uso pessoal, profissional e corporativo. Todas as marcas líderes do mercado.</p>
+        <p class="section-desc" style="margin-top:.8rem;">Atendimento consultivo para encontrar o equipamento ideal para a sua necessidade e orçamento — sem empurroterapia.</p>
+        <div style="margin-top:2rem;">
+          <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="btn-primary">Acessar Loja →</a>
+        </div>
+        <div style="margin-top:2rem;padding:1.5rem;background:var(--bg3);border:1px solid var(--border);">
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:var(--cyan);letter-spacing:.15em;margin-bottom:.8rem;">// MARCAS DISPONÍVEIS</p>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">Dell</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">HP</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">Lenovo</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">Acer</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">Asus</span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .7rem;">Samsung</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-grid reveal reveal-d2">
+        <div class="product-card">
+          <span class="product-card-tag">Mais Vendido</span>
+          <p class="product-name">Notebook para Home Office</p>
+          <p class="product-spec">Ideal para trabalho híbrido. Processadores Intel/AMD de última geração, SSD NVMe, bateria de longa duração e tela Full HD.</p>
+          <div class="product-action">
+            <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="product-link">Ver na loja <span>→</span></a>
+            <span class="product-label">Consulte disponibilidade</span>
+          </div>
+        </div>
+        <div class="product-card">
+          <span class="product-card-tag">Corporativo</span>
+          <p class="product-name">Workstation Empresarial</p>
+          <p class="product-spec">Alta performance para demandas corporativas. Compatível com AutoCAD, Photoshop, ERPs e softwares de gestão.</p>
+          <div class="product-action">
+            <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="product-link">Ver na loja <span>→</span></a>
+            <span class="product-label">Consulte disponibilidade</span>
+          </div>
+        </div>
+        <div class="product-card">
+          <span class="product-card-tag">Custo-Benefício</span>
+          <p class="product-name">Notebook Estudante</p>
+          <p class="product-spec">Equipamento leve e eficiente para estudos, videoconferências e uso cotidiano. Melhor relação qualidade/preço.</p>
+          <div class="product-action">
+            <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="product-link">Ver na loja <span>→</span></a>
+            <span class="product-label">Consulte disponibilidade</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section id="diferenciais">
+    <div class="dif-layout">
+      <div class="dif-sticky reveal">
+        <p class="section-kicker">Por que nos escolher</p>
+        <h2 class="section-title">O nosso <em>diferencial</em></h2>
+        <div class="hr-line"></div>
+        <p class="section-desc">Mais do que técnicos, somos parceiros tecnológicos que entendem o seu negócio e entregam resultados reais.</p>
+        <a href="#cta" class="btn-primary" style="margin-top:2rem;display:inline-block;font-size:.75rem;">Solicitar Orçamento</a>
+      </div>
+      <div class="dif-list reveal reveal-d2">
+        <div class="dif-item">
+          <span class="dif-num">01</span>
+          <div class="dif-content">
+            <p class="dif-title">Atendimento Rápido e Pontual</p>
+            <p class="dif-text">Sabemos que tempo parado é dinheiro perdido. Priorizamos agilidade no diagnóstico e na resolução de problemas, minimizando o impacto na sua operação.</p>
+          </div>
+        </div>
+        <div class="dif-item">
+          <span class="dif-num">02</span>
+          <div class="dif-content">
+            <p class="dif-title">Consultoria Gratuita sem Compromisso</p>
+            <p class="dif-text">Avaliamos a real necessidade da sua empresa antes de qualquer proposta. Transparência total: você sabe exatamente o que está contratando.</p>
+          </div>
+        </div>
+        <div class="dif-item">
+          <span class="dif-num">03</span>
+          <div class="dif-content">
+            <p class="dif-title">Equipe Especializada e Certificada</p>
+            <p class="dif-text">Profissionais com experiência comprovada em suporte técnico, redes, segurança e consultoria. Conhecimento técnico de verdade.</p>
+          </div>
+        </div>
+        <div class="dif-item">
+          <span class="dif-num">04</span>
+          <div class="dif-content">
+            <p class="dif-title">Soluções Completas em Um Só Lugar</p>
+            <p class="dif-text">Da consultoria à compra do equipamento, passando pela instalação e suporte contínuo — tudo com a NR. Sem precisar procurar em outros lugares.</p>
+          </div>
+        </div>
+        <div class="dif-item">
+          <span class="dif-num">05</span>
+          <div class="dif-content">
+            <p class="dif-title">Preço Justo e Orçamento Transparente</p>
+            <p class="dif-text">Sem surpresas na nota fiscal. Orçamento detalhado, preço combinado e serviço entregue. Construímos relações de longo prazo com nossos clientes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESSO -->
+  <section id="processo">
+    <div class="processo-head reveal">
+      <p class="section-kicker">Como funciona</p>
+      <h2 class="section-title">Nosso <em>Processo</em></h2>
+      <div class="hr-line"></div>
+    </div>
+    <div class="steps-grid">
+      <div class="step-item reveal reveal-d1">
+        <div class="step-circle">01</div>
+        <p class="step-title">Contato Inicial</p>
+        <p class="step-text">Entre em contato pelo Instagram ou WhatsApp. Atendimento rápido e sem burocracia.</p>
+      </div>
+      <div class="step-item reveal reveal-d2">
+        <div class="step-circle">02</div>
+        <p class="step-title">Diagnóstico</p>
+        <p class="step-text">Avaliamos sua necessidade ou equipamento. Diagnóstico claro e objetivo, sem enrolação.</p>
+      </div>
+      <div class="step-item reveal reveal-d3">
+        <div class="step-circle">03</div>
+        <p class="step-title">Proposta</p>
+        <p class="step-text">Orçamento detalhado e transparente. Você aprova antes de qualquer serviço ser executado.</p>
+      </div>
+      <div class="step-item reveal reveal-d4">
+        <div class="step-circle">04</div>
+        <p class="step-title">Entrega</p>
+        <p class="step-text">Solução entregue com qualidade e prazo. Suporte pós-atendimento incluído.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HORÁRIO + CONTATO -->
+  <section id="horario">
+    <div class="reveal">
+      <p class="section-kicker">Disponibilidade</p>
+      <h2 class="section-title">Horário de <em>Atendimento</em></h2>
+      <div class="hr-line"></div>
+      <div class="open-badge">
+        <span class="open-dot"></span>
+        Aberto Agora · Fecha às 17:00
+      </div>
+      <div class="hours-table">
+        <div class="hour-row"><span class="hour-day">seg</span><span class="hour-time">08:00 — 17:00</span></div>
+        <div class="hour-row"><span class="hour-day">ter</span><span class="hour-time">08:00 — 17:00</span></div>
+        <div class="hour-row"><span class="hour-day">qua</span><span class="hour-time">08:00 — 17:00</span></div>
+        <div class="hour-row"><span class="hour-day">qui</span><span class="hour-time">08:00 — 17:00</span></div>
+        <div class="hour-row hour-today"><span class="hour-day">sex · hoje</span><span class="hour-time">08:00 — 17:00</span></div>
+        <div class="hour-row"><span class="hour-day">sáb</span><span class="hour-time">Consultar</span></div>
+        <div class="hour-row"><span class="hour-day">dom</span><span class="hour-time">Fechado</span></div>
+      </div>
+    </div>
+    <div class="reveal reveal-d2">
+      <p class="section-kicker">Fale conosco</p>
+      <h2 class="section-title">Entre em <em>Contato</em></h2>
+      <div class="hr-line"></div>
+      <div class="contact-item">
+        <span class="contact-icon">📷</span>
+        <div class="contact-text">
+          <strong>Instagram</strong>
+          <a href="https://www.instagram.com/nr_consultoriati/" target="_blank">@nr_consultoriati</a><br>
+          Mensagens, orçamentos e atualizações
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">🛒</span>
+        <div class="contact-text">
+          <strong>Loja de Notebooks</strong>
+          <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank">nrnotebooks.sigeloja.com.br</a><br>
+          Catálogo completo de equipamentos
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">🕐</span>
+        <div class="contact-text">
+          <strong>Horário de Funcionamento</strong>
+          Segunda a Sexta · 08:00 às 17:00<br>
+          Atendimento presencial e remoto
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <div class="contact-text">
+          <strong>Atendimento</strong>
+          Presencial, remoto e visita técnica<br>
+          Consulte disponibilidade de deslocamento
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="cta">
+    <p class="cta-mono reveal">// Pronto para começar?</p>
+    <h2 class="cta-title reveal reveal-d1">Sua TI nas<br><em>mãos certas.</em></h2>
+    <p class="cta-sub reveal reveal-d2">Fale agora com a NR Consultoria TI e receba um diagnóstico gratuito. Sem compromisso, sem burocracia — só solução.</p>
+    <div class="cta-actions reveal reveal-d3">
+      <a href="https://www.instagram.com/nr_consultoriati/" target="_blank" class="btn-primary">📷 Falar no Instagram</a>
+      <a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank" class="btn-ghost">🛒 Visitar Loja Online</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-logo-wrap">
+        <a class="nav-logo" href="#" style="display:inline-flex;">
+          <div class="nav-logo-icon">NR</div>
+          <span class="nav-logo-text">Consultoria <span>TI</span></span>
+        </a>
+        <p class="footer-tagline">Tecnologia que transforma. Suporte que resolve. Equipamentos que performam.</p>
+        <a href="https://www.instagram.com/nr_consultoriati/" target="_blank" class="social-link">
+          📷 @nr_consultoriati
+        </a>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Navegação</p>
+        <ul>
+          <li><a href="#sobre">Sobre Nós</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#loja">Loja de Notebooks</a></li>
+          <li><a href="#diferenciais">Diferenciais</a></li>
+          <li><a href="#horario">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Serviços</p>
+        <ul>
+          <li><a href="#servicos">Manutenção Técnica</a></li>
+          <li><a href="#servicos">Segurança & Antivírus</a></li>
+          <li><a href="#servicos">Redes & Infraestrutura</a></li>
+          <li><a href="#servicos">Formatação & Instalação</a></li>
+          <li><a href="#servicos">Consultoria Empresarial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-title">Links Úteis</p>
+        <ul>
+          <li><a href="https://www.nrnotebooks.sigeloja.com.br/" target="_blank">Loja Online</a></li>
+          <li><a href="https://www.instagram.com/nr_consultoriati/" target="_blank">Instagram</a></li>
+          <li><a href="#cta">Solicitar Orçamento</a></li>
+          <li><a href="#processo">Como Funciona</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 NR Consultoria TI · Todos os direitos reservados</p>
+      <p class="footer-right">Tecnologia <span>// Online</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // ── THEME TOGGLE ──
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    // Restore saved preference
+    const savedTheme = localStorage.getItem('nrTheme');
+    if (savedTheme === 'light') {
+      html.classList.add('light');
+      themeToggle.checked = true;
+    }
+
+    themeToggle.addEventListener('change', () => {
+      if (themeToggle.checked) {
+        html.classList.add('light');
+        localStorage.setItem('nrTheme', 'light');
+      } else {
+        html.classList.remove('light');
+        localStorage.setItem('nrTheme', 'dark');
+      }
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+    // Mobile menu
+    const ham = document.getElementById('hamburger');
+    const mob = document.getElementById('mobileMenu');
+    ham.addEventListener('click', () => mob.style.display = mob.style.display === 'flex' ? 'none' : 'flex');
+    function closeMob() { mob.style.display = 'none'; }
+
+    // Scroll reveal
+    const revEls = document.querySelectorAll('.reveal');
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }).observe
+    ? revEls.forEach(el => new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }).observe(el))
+    : revEls.forEach(el => el.classList.add('visible'));
+
+    // Highlight today's row dynamically
+    const dayNames = ['dom','seg','ter','qua','qui','sex','sáb'];
+    const todayName = dayNames[new Date().getDay()];
+    document.querySelectorAll('.hour-row').forEach(row => {
+      const span = row.querySelector('.hour-day');
+      if (span && span.textContent.startsWith(todayName)) {
+        row.classList.add('hour-today');
+        span.textContent = todayName + ' · hoje';
+      }
+    });
+  </script>
+</body>
+</html>
